@@ -157,7 +157,7 @@ function sendPost($url,$data){
 
     //Configuration
     $data['access_token'] = "YOUR_ACCESS_TOKEN_HERE";
-    $url = "https://api.spark.io/v1/devices/YOUR_DEVICE_ID_HERE/".$url;
+    $url = "https://api.particle.io/v1/devices/YOUR_DEVICE_ID_HERE/".$url;
 
     $options = array(
         'http' => array(
@@ -167,9 +167,18 @@ function sendPost($url,$data){
         ),);
     $context  = stream_context_create($options);
     $result = file_get_contents($url, false, $context);
+    urlLog($url);
     var_dump($result);
 }
 
+// For debugging purposes
+function urlLog($url)
+{
+	$message = "API request from " . $_SERVER['REMOTE_ADDR'] . " to: " . $url;
+	openlog('urlLog', LOG_PID | LOG_ODELAY,LOG_LOCAL4);
+	syslog(LOG_INFO, $url);
+	closelog();
+}
 
 $app->run();
 
